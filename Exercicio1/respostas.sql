@@ -39,5 +39,6 @@ select * from raca
 
 select * from servico
 	where datediff(curdate(), data) > 365
+    and pago = false;
 ;
 
