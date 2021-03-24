@@ -12,7 +12,8 @@ FROM
     funcionario f,
     dependente d
 WHERE
-    d.fcpf = f.cpf;
+    d.fcpf = f.cpf
+        AND d.parentesco LIKE 'F%'; -- não corrigi isso no documento
 
 -- b) Selecione o nome do funcionário e o nome do departamento ao qual ele está alocado.
 
