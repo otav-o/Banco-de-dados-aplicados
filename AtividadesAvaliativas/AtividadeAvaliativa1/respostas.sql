@@ -4,6 +4,7 @@ select * from area;
 select * from organizacao;
 select * from municipio;
 select * from resultado;
+select * from modalidade;
 
 -- QUESTÃO 01: Recupere os nomes das ies e o nome das categorias das quais elas pertencem.(1478 linhas retornadas)
 SELECT 
@@ -73,3 +74,90 @@ WHERE
     m.nomeMunicipio = 'Juiz de Fora';
     
 -- QUESTÃO 03: Recupere o nome da ies, o nome da área, o conceito faixa e o conceito contínuo das ies que receberam o conceito faixa ou conceito contínuo menor que 3.(7563 linhas retornadas)
+SELECT 
+    i.nomeIES, a.nomeArea, r.conceitoFaixa, r.conceitoContinuo
+FROM
+    ies i,
+    area a,
+    resultado r
+WHERE
+    i.codIES = r.codIES
+        AND r.codArea = a.codArea
+        AND r.conceitoContinuo < 3
+        OR r.conceitoFaixa < 3; -- gastou 12gb de ram por 4 minutos e ainda cancelei antes do resultado
+        
+-- ou
+SELECT 
+    i.nomeIES, a.nomeArea, r.conceitoFaixa, r.conceitoContinuo
+FROM
+    ies i
+        INNER JOIN
+    resultado r ON i.codIES = r.codIES
+        INNER JOIN
+    area a ON r.codArea = a.codArea
+WHERE
+    r.conceitoContinuo < 3
+        OR r.conceitoFaixa < 3; -- deu certo
+        
+-- ou
+SELECT 
+    i.nomeIES, a.nomeArea, r.conceitoFaixa, r.conceitoContinuo
+FROM
+    ies i
+        NATURAL JOIN
+    resultado r
+        NATURAL JOIN
+    area a
+WHERE
+    r.conceitoContinuo < 3
+        OR r.conceitoFaixa < 3;
+        
+-- QUESTÃO 04: Recupere o nome da ies e o conceito contínuo de todas as ies cuja modalidade de ensino é presencial.(10054 linhas retornadas)
+SELECT 
+    i.nomeIES, r.conceitoContinuo
+FROM
+    ies i,
+    resultado r,
+    modalidade m
+WHERE
+    i.codIES = r.codIES
+        AND r.codModalidade = m.codModalidade
+        AND m.nomeModalidade LIKE '%presencial';
+        
+-- ou
+SELECT 
+    i.nomeIES, r.conceitoContinuo
+FROM
+    ies i
+        INNER JOIN
+    resultado r ON i.codIES = r.codIES
+        INNER JOIN
+    modalidade m ON r.codModalidade = m.codModalidade
+WHERE
+    m.nomeModalidade LIKE '%presencial';
+    
+-- ou
+SELECT 
+    i.nomeIES, r.conceitoContinuo
+FROM
+    ies i
+        INNER JOIN
+    resultado r ON i.codIES = r.codIES
+        INNER JOIN
+    modalidade m ON r.codModalidade = m.codModalidade
+WHERE
+    m.nomeModalidade LIKE '%presencial';
+    
+-- ou
+SELECT 
+    i.nomeIES, r.conceitoContinuo
+FROM
+    ies i
+        NATURAL JOIN
+    resultado r
+        NATURAL JOIN
+    modalidade m
+WHERE
+    m.nomeModalidade LIKE '%presencial';
+        
+
