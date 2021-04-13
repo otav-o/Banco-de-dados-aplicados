@@ -83,8 +83,8 @@ FROM
 WHERE
     i.codIES = r.codIES
         AND r.codArea = a.codArea
-        AND r.conceitoContinuo < 3
-        OR r.conceitoFaixa < 3; -- gastou 12gb de ram por 4 minutos e ainda cancelei antes do resultado
+        AND (r.conceitoContinuo < 3
+        OR r.conceitoFaixa < 3);
         
 -- ou
 SELECT 
