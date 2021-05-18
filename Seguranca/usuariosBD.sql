@@ -42,4 +42,34 @@ WHERE
     user = 'otavio';
     
 
+/* Crie os usuários: fulano, ciclano, beltrano e admin; */
+create user fulano, ciclano, beltrano, admin identified by '1', '2', '3', '4'; -- confirmar se é possível definir senhas diferentes
 
+/* Fulano tem acesso a todas as tabelas, podendo conusltar, inserir, alterar e excluir dados */
+grant select, insert, update, delete on empresa.* to fulano;
+show grants for fulano;
+
+/* Ciclano deve ter acesso somente à tabela funcionário.
+Ele pode consultar e inserir dados, mas não alterar ou excluir. */
+
+grant select, insert on empresa.funcionario to ciclano;
+show grants for ciclano;
+
+/* Fulano e Ciclano ganham direito de visualização, inclusão e alteração na tabela departamento; */
+grant select, insert on empresa.departamento to fulano, ciclano;
+
+/* Fulano ganha o direito de exclusão da tabela departamento */
+grant drop on empresa.departamento to fulano;
+show grants for fulano;
+
+/* Admin tenta excluir a tabela departamento */
+
+/* Root revoga o direito de todos os usuário (fulano, ciclano, beltrano e admin) */
+revoke all on *.* from fulano, ciclano, beltrano, admin; -- não!
+
+revoke select, insert, drop on empresa.departamento from fulano;
+revoke select, insert, update, delete on empresa.* from fulano;
+revoke select, insert on empresa.departamento from ciclano;
+revoke select, insert on empresa.funcionario from ciclano;
+
+select * from mysql.user;
