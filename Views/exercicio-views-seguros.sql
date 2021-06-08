@@ -61,7 +61,36 @@ CREATE VIEW nao_acidentados_2 AS
         p.id_motorista IS NULL;
 
 -- 5)  	Crie e exiba uma visão que recupere os dados dos carros que se envolveram em nenhum ou no máximo 1 acidente. Ordenados pelo modelo do carro.
+select * from acidente;
+select * from carro;
+select * from participou;
 
+CREATE VIEW carros_ate_1_acidente AS
+    SELECT 
+        c.*, COUNT(*)
+    FROM
+        carro c
+    WHERE
+        c.placa NOT IN (SELECT 
+                c.placa
+            FROM
+                carro c
+                    NATURAL JOIN
+                participou p
+            HAVING COUNT(*) > 1)
+	GROUP BY placa
+    ORDER BY modelo; 
+            
+CREATE VIEW carros_ate_1_acidente_2 AS
+    SELECT 
+        c.*
+    FROM
+        carro c
+            NATURAL LEFT JOIN
+        participou p
+    GROUP BY c.modelo
+    HAVING COUNT(*) <= 1
+    ORDER BY c.modelo;
 
 -- 6)   Crie e exiba uma visão que recupere os dados dos acidentes com o maior valor de dano.
 -- 7)   Crie e exiba uma visão que recupere os dados dos acidentes com o menor valor de dano.
